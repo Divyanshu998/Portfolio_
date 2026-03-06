@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { ChevronDown, ChevronRight, Calendar, MapPin } from 'lucide-react';
+import SectionHeader from './SectionHeader';
 
 const Experience: React.FC = () => {
   const ref = useRef(null);
@@ -104,9 +105,7 @@ const Experience: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 text-green-400">
-            [ EXPERIENCE_LOG ]
-          </h2>
+          <SectionHeader title="EXPERIENCE_LOG" />
 
           <div className="max-w-4xl mx-auto">
             {/* Timeline */}

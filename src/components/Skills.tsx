@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import SectionHeader from './SectionHeader';
 
 const Skills: React.FC = () => {
   const ref = useRef(null);
@@ -74,9 +75,7 @@ const Skills: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 text-green-400">
-            [ SKILLS_MATRIX ]
-          </h2>
+          <SectionHeader title="SKILLS_MATRIX" />
 
           {/* Tab Navigation */}
           <div className="flex flex-wrap justify-center mb-8 gap-2">

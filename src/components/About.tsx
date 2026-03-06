@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import SectionHeader from './SectionHeader';
+import WindowContainer from './WindowContainer';
 
 const About: React.FC = () => {
   const ref = useRef(null);
@@ -47,39 +49,16 @@ As Secretary of the Coding Club at TIT Bhopal, I mentor aspiring developers and 
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 text-green-400">
-            [ ABOUT_ME ]
-          </h2>
+          <SectionHeader title="ABOUT_ME" />
           
-          <div className="max-w-4xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="bg-black/60 border border-green-400/50 rounded-lg p-8 shadow-2xl"
-              style={{
-                boxShadow: '0 0 50px rgba(0, 255, 65, 0.1)'
-              }}
-            >
-              <div className="flex items-center mb-4">
-                <div className="flex space-x-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                </div>
-                <div className="ml-4 text-green-400 font-mono text-sm">
-                  terminal_about.sh
-                </div>
-              </div>
-              
-              <div className="bg-black/80 rounded p-6 min-h-96">
-                <pre className="text-green-400 font-mono text-sm leading-relaxed whitespace-pre-wrap">
-                  {displayText}
-                  <span className="animate-pulse">█</span>
-                </pre>
-              </div>
-            </motion.div>
-          </div>
+          <WindowContainer title="terminal_about.sh" id="about" showControls={false}>
+            <div className="p-6 min-h-[400px]">
+              <pre className="text-green-400 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+                {displayText}
+                <span className="animate-pulse">█</span>
+              </pre>
+            </div>
+          </WindowContainer>
         </motion.div>
       </div>
     </section>

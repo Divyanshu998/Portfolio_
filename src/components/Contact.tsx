@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Send, Mail, Instagram, Twitter, Linkedin, Github, Shield } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import SectionHeader from './SectionHeader';
 
 const Contact: React.FC = () => {
   const ref = useRef(null);
@@ -13,6 +15,7 @@ const Contact: React.FC = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const socialLinks = [
     {
@@ -73,13 +76,46 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Backend API call (Node.js/Express)
+      // Using 127.0.0.1 instead of localhost can avoid some IPv6 resolution issues in browsers
+      const response = await fetch('http://127.0.0.1:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Server returned ${response.status}`);
+      }
+
+      const result = await response.json();
+      setSubmitStatus('success');
       setFormData({ name: '', email: '', subject: '', message: '' });
-      alert('Message sent successfully! I\'ll get back to you soon.');
-    }, 2000);
+      alert('Message sent successfully!');
+    } catch (error: any) {
+      console.error('Error sending message:', error.message);
+      setSubmitStatus('error');
+      
+      // Detailed error alert to help debugging
+      if (error.message.includes('Failed to fetch')) {
+        alert('CONNECTION_REFUSED: Backend server not reachable at http://127.0.0.1:5000');
+      } else {
+        alert(`TRANSMISSION_FAILED: ${error.message}`);
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -91,9 +127,7 @@ const Contact: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 text-green-400">
-            [ INITIATE_CONTACT ]
-          </h2>
+          <SectionHeader title="INITIATE_CONTACT" />
 
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

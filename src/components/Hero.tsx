@@ -1,6 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+
+const BinaryRain: React.FC = () => {
+  const columns = useMemo(() => Array.from({ length: 25 }, (_, i) => ({
+    id: i,
+    left: `${i * 4}%`,
+    duration: Math.random() * 8 + 5,
+    delay: Math.random() * 5,
+    binary: Array.from({ length: 20 }).map(() => Math.round(Math.random()))
+  })), []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.15]">
+      {columns.map((col) => (
+        <motion.div
+          key={col.id}
+          initial={{ y: -500 }}
+          animate={{ y: ['0vh', '120vh'] }}
+          transition={{ 
+            duration: col.duration, 
+            repeat: Infinity, 
+            ease: "linear",
+            delay: col.delay
+          }}
+          className="absolute text-green-500 font-mono text-[10px] whitespace-nowrap leading-none flex flex-col items-center"
+          style={{ left: col.left }}
+        >
+          {col.binary.map((bit, j) => (
+            <div key={j} className="my-1">{bit}</div>
+          ))}
+        </motion.div>
+      ))}
+    </div>
+  );
+};
 
 const Hero: React.FC = () => {
   const [displayText, setDisplayText] = useState('');
@@ -8,10 +42,10 @@ const Hero: React.FC = () => {
   const [isTyping, setIsTyping] = useState(true);
 
   const roles = [
-    'Python Developer 🐍',
+    'Cybersecurity Specialist 🛡️',
+    'Ethical Hacker ⚔️',
     'Bug Bounty Hunter 🎯', 
-    'Forex Trader 📈',
-    'AI Developer 🤖'
+    'AI Security Expert 🤖'
   ];
 
   useEffect(() => {
@@ -20,8 +54,8 @@ const Hero: React.FC = () => {
     
     if (isTyping) {
       const typeInterval = setInterval(() => {
-        if (index < currentRole.length) {
-          setDisplayText(currentRole.slice(0, index + 1));
+        if (index <= currentRole.length) {
+          setDisplayText(currentRole.slice(0, index));
           index++;
         } else {
           setIsTyping(false);
@@ -31,81 +65,82 @@ const Hero: React.FC = () => {
           }, 2000);
           clearInterval(typeInterval);
         }
-      }, 100);
+      }, 80);
       
       return () => clearInterval(typeInterval);
     } else {
       const eraseInterval = setInterval(() => {
         if (displayText.length > 0) {
-          setDisplayText(displayText.slice(0, -1));
+          setDisplayText(prev => prev.slice(0, -1));
         } else {
           clearInterval(eraseInterval);
         }
-      }, 50);
+      }, 40);
       
       return () => clearInterval(eraseInterval);
     }
-  }, [currentRoleIndex, isTyping, displayText, roles]);
+  }, [currentRoleIndex, isTyping, roles.length]);
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative">
-      <div className="container mx-auto px-4 text-center">
+    <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black">
+      <BinaryRain />
+      <div className="container mx-auto px-4 text-center z-10">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2 }}
           className="mb-8"
         >
-          <div className="border border-green-400/30 rounded-lg p-8 bg-black/40 backdrop-blur-sm max-w-4xl mx-auto">
+          <div className="border border-[#00ff88]/20 rounded-xl p-10 bg-black/60 backdrop-blur-xl max-w-5xl mx-auto shadow-[0_0_50px_rgba(0,0,0,0.5)]">
             <motion.pre 
-              className="text-green-400 text-sm mb-6 overflow-x-auto"
+              className="text-[#00ff88] text-[8px] md:text-[10px] mb-8 overflow-hidden leading-tight font-mono opacity-80"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
 {`
-██████╗ ██╗██╗   ██╗██╗   ██╗ █████╗ ███╗   ██╗███████╗██╗  ██╗██╗   ██╗
-██╔══██╗██║██║   ██║╚██╗ ██╔╝██╔══██╗████╗  ██║██╔════╝██║  ██║██║   ██║
-██║  ██║██║██║   ██║ ╚████╔╝ ███████║██╔██╗ ██║███████╗███████║██║   ██║
-██║  ██║██║╚██╗ ██╔╝  ╚██╔╝  ██╔══██║██║╚██╗██║╚════██║██╔══██║██║   ██║
-██████╔╝██║ ╚████╔╝    ██║   ██║  ██║██║ ╚████║███████║██║  ██║╚██████╔╝
-╚═════╝ ╚═╝  ╚═══╝     ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝
+ ██████╗██╗   ██╗██████╗ ███████╗██████╗ ███████╗███████╗ ██████╗██╗   ██╗██████╗ ██╗████████╗██╗   ██╗
+██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗██╔════╝██╔════╝██╔════╝██║   ██║██╔══██╗██║╚══██╔══╝╚██╗ ██╔╝
+██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝███████╗█████╗  ██║     ██║   ██║██████╔╝██║   ██║    ╚████╔╝ 
+██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗╚════██║██╔══╝  ██║     ██║   ██║██╔══██╗██║   ██║     ╚██╔╝  
+╚██████╗   ██║   ██████╔╝███████╗██║  ██║███████║███████╗╚██████╗╚██████╔╝██║  ██║██║   ██║      ██║   
+ ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝   ╚═╝      ╚═╝   
 `}
             </motion.pre>
             
             <motion.h1 
-              className="text-4xl md:text-6xl font-bold mb-6 text-green-400"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1, duration: 0.8 }}
+              className="text-4xl md:text-7xl font-black mb-6 text-white tracking-tighter"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
             >
-              DIVYANSHU SHINDE
+              <span className="text-[#00ff88]">CYBERSECURITY</span> SHINDE
             </motion.h1>
             
             <motion.div
-              className="text-xl md:text-2xl mb-8 text-green-300"
+              className="text-lg md:text-2xl mb-10 font-mono tracking-widest text-green-100/80"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+            >
+              <p className="mb-2">CTO at Incubator Pool | Secure System Architect</p>
+              <p className="text-[#00ff88] font-bold text-sm bg-[#00ff88]/10 py-1 px-4 inline-block rounded-full border border-[#00ff88]/30">
+                &gt; 2X National Hackathon Winner _
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="mb-12"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.5 }}
             >
-              <p className="mb-4">CTO at Incubator Pool | AI & Cybersecurity Enthusiast</p>
-              <p className="text-red-400 font-bold">2X National Hackathon Winner</p>
-            </motion.div>
-
-            <motion.div
-              className="mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 2 }}
-            >
-              <div className="bg-black/60 border border-green-400/50 rounded-lg p-4 inline-block">
-                <span className="text-green-400">root@divyanshu:~$ </span>
-                <span className="text-white">echo "</span>
-                <span className="text-green-400">
+              <div className="bg-[#111] border border-[#00ff88]/30 rounded-md py-3 px-6 inline-flex items-center gap-3 shadow-[0_0_20px_rgba(0,255,136,0.1)]">
+                <span className="text-[#00ff88] font-bold">root@cyber:~$ </span>
+                <span className="text-white/90 font-mono">
                   {displayText}
-                  <span className="animate-pulse">|</span>
+                  <span className="inline-block w-2 h-5 bg-[#00ff88] ml-1 align-middle animate-pulse" />
                 </span>
-                <span className="text-white">"</span>
               </div>
             </motion.div>
 

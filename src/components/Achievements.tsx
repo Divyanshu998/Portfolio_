@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { Trophy, Award, Users, Target, Code, Shield } from 'lucide-react';
+import SectionHeader from './SectionHeader';
 
 const Achievements: React.FC = () => {
   const ref = useRef(null);
@@ -79,9 +80,7 @@ const Achievements: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-12 text-green-400">
-            [ ACHIEVEMENT_UNLOCKED ]
-          </h2>
+          <SectionHeader title="ACHIEVEMENT_UNLOCKED" />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {achievements.map((achievement, index) => {

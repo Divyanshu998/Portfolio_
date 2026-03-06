@@ -1,12 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import ParticleBackground from './components/ParticleBackground';
+import BackgroundEffects from './components/BackgroundEffects';
 import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Achievements from './components/Achievements';
 import Experience from './components/Experience';
+import TerminalLab from './components/TerminalLab';
 import Contact from './components/Contact';
 import Navigation from './components/Navigation';
 
@@ -14,6 +16,7 @@ function App() {
   return (
     <div className="min-h-screen bg-black text-green-400 font-mono relative overflow-x-hidden">
       <ParticleBackground />
+      <BackgroundEffects />
       <Navigation />
       
       <main className="relative z-10">
@@ -23,6 +26,7 @@ function App() {
         <Projects />
         <Achievements />
         <Experience />
+        <TerminalLab />
         <Contact />
       </main>
       
